@@ -1,16 +1,49 @@
-.venv/
+# =========================
+# Python
+# =========================
 __pycache__/
-.ipynb_checkpoints/
-.DS_Store
+*.py[cod]
+*.pyo
 
+# =========================
+# Virtual Environment
+# =========================
+.venv/
+venv/
+
+# =========================
+# Jupyter
+# =========================
+.ipynb_checkpoints/
+
+# =========================
+# Operating System Files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
 # Dataset
+# Keep folder structure but ignore dataset contents
+# =========================
 data/**
 !data/.gitkeep
 
-# Trained models
+# =========================
+# Trained Models
+# =========================
 model.keras
 *.h5
+*.keras
 
-# Generated outputs
-images/*.png
-!images/.gitkeep
+# =========================
+# VS Code
+# Keep project interpreter settings
+# =========================
+.vscode/*
+!.vscode/settings.json
+
+# =========================
+# Logs
+# =========================
+*.log

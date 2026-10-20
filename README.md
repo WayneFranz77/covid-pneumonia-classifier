@@ -6,37 +6,54 @@ A deep learning computer vision project that classifies chest X-ray images into 
 - Pneumonia
 - Normal
 
-This project uses TensorFlow and Keras to develop, train, and evaluate image classification models capable of identifying lung conditions from chest X-ray images. The project forms part of a machine learning and deep learning portfolio focused on real-world healthcare applications.
+This project uses TensorFlow and Keras to build, train, and evaluate image classification models. A baseline neural network was developed and compared against a Convolutional Neural Network (CNN) to determine the most effective architecture for medical image classification.
 
 ---
 
 ## Project Overview
 
-Medical image classification is a challenging and impactful application of deep learning. Using a dataset of chest X-ray scans, this project aims to build a multi-class classification model that can distinguish between:
+Medical image classification is an important real-world application of deep learning that can assist healthcare professionals by identifying disease patterns from diagnostic images.
+
+Using chest X-ray images, this project aims to classify patients into one of three categories:
 
 - COVID-19
 - Pneumonia
-- Healthy lungs
+- Normal
 
-The project explores image preprocessing, neural network design, model evaluation, and performance optimization using TensorFlow.
+The project explores:
+
+- Image preprocessing
+- Neural network development
+- Convolutional neural networks
+- Model evaluation
+- Performance visualization
 
 ---
 
-## Project Objectives
+## Dataset Summary
 
-- Build a deep learning image classifier using TensorFlow and Keras
-- Preprocess and normalize medical image data
-- Train and evaluate convolutional neural networks (CNNs)
-- Monitor model performance using training and validation metrics
-- Visualize loss and accuracy during training
-- Evaluate predictions using confusion matrices and classification reports
-- Develop a professional machine learning project workflow suitable for a portfolio
+### Training Dataset
+
+| Class | Images |
+|---------|---------:|
+| Covid | 111 |
+| Normal | 70 |
+| Pneumonia | 70 |
+
+**Total Training Images:** 251
+
+### Testing Dataset
+
+**Total Testing Images:** 66
+
+The dataset is used for a multi-class image classification task.
+
+> Note: The dataset is intentionally excluded from source control via `.gitignore` to keep the repository lightweight and to respect dataset licensing restrictions.
 
 ---
 
 ## Project Structure
 
-```text
 covid-pneumonia-classifier/
 │
 ├── data/
@@ -47,12 +64,14 @@ covid-pneumonia-classifier/
 │   └── covid_pneumonia_classifier.ipynb
 │
 ├── images/
+│   ├── training_history.png
+│   └── confusion_matrix.png
 │
 ├── requirements.txt
 ├── README.md
 ├── LICENSE
-└── .gitignore
-```
+├── .gitignore
+└── model.keras
 
 ---
 
@@ -62,79 +81,169 @@ covid-pneumonia-classifier/
 - TensorFlow
 - Keras
 - NumPy
-- Matplotlib
 - Scikit-learn
+- Matplotlib
 - Jupyter Notebook
 - VS Code
 - Git & GitHub
 
 ---
 
-## Machine Learning Workflow
+## Models Developed
 
-### 1. Data Preparation
+### Baseline Neural Network
 
-- Load chest X-ray images
-- Resize images to a consistent shape
-- Normalize pixel values
-- Create training and testing datasets
+Architecture:
 
-### 2. Model Development
+Input Image
+↓
+Flatten
+↓
+Dense(128, ReLU)
+↓
+Dense(3, Softmax)
 
-- Build a baseline neural network
-- Implement Convolutional Neural Networks (CNNs)
-- Experiment with hyperparameters
-- Apply regularization techniques to reduce overfitting
+Results:
 
-### 3. Model Evaluation
+| Metric | Value |
+|---------|---------:|
+| Test Accuracy | 84.85% |
+| Test Loss | 1.8944 |
 
-Evaluate performance using:
+Observations:
 
-- Accuracy
-- Loss
-- Confusion Matrix
-- Classification Report
-- Training and Validation Curves
+- Achieved strong accuracy for a simple architecture
+- Contained over 19 million trainable parameters
+- Showed signs of overfitting
+- Served as a benchmark for comparison against the CNN
 
-### 4. Model Improvement
+---
 
-Potential enhancements include:
+### Convolutional Neural Network (CNN)
 
+Architecture:
+
+Input
+↓
+Conv2D (32 Filters)
+↓
+MaxPooling2D
+↓
+Conv2D (64 Filters)
+↓
+MaxPooling2D
+↓
+Flatten
+↓
+Dense(128)
+↓
+Dropout(30%)
+↓
+Softmax Output (3 Classes)
+
+Results:
+
+| Metric | Value |
+|---------|---------:|
+| Test Accuracy | 90.91% |
+| Test Loss | 0.1598 |
+
+Improvement over Baseline:
+
+Accuracy Improvement: +6.06%
+
+The CNN significantly improved performance by learning spatial image features directly from the chest X-ray images.
+
+---
+
+## Results Summary
+
+| Model | Test Accuracy |
+|---------|---------:|
+| Baseline Neural Network | 84.85% |
+| Convolutional Neural Network | 90.91% |
+
+### Key Findings
+
+- CNN improved accuracy by 6.06%
+- CNN reduced test loss from 1.8944 to 0.1598
+- COVID images were classified perfectly
+- Pneumonia images were classified perfectly
+- Most errors occurred between Normal and Pneumonia images
+- CNN demonstrated significantly better generalization than the baseline model
+
+---
+
+## Training Performance
+
+### CNN Training Curves
+
+[Training History](images/training_history.png)
+
+### Training Analysis
+
+The CNN showed strong learning performance throughout training.
+
+- Training accuracy increased steadily toward 100%
+- Validation accuracy remained above 90%
+- Validation loss remained low and stable
+- The model demonstrated strong generalization performance
+
+Although a small amount of overfitting appeared near the end of training, validation performance remained strong.
+
+---
+
+## Confusion Matrix
+
+### CNN Confusion Matrix
+
+[Confusion Matrix](images/confusion_matrix.png)
+
+### Classification Report
+
+| Class | Precision | Recall | F1-Score |
+|---------|---------:|---------:|---------:|
+| Covid | 1.00 | 1.00 | 1.00 |
+| Normal | 1.00 | 0.85 | 0.92 |
+| Pneumonia | 0.87 | 1.00 | 0.93 |
+
+### Confusion Matrix Analysis
+
+The CNN correctly classified:
+
+- 26 out of 26 COVID images
+- 20 out of 20 Pneumonia images
+
+The only classification errors occurred when several Normal images were predicted as Pneumonia.
+
+This suggests the model was highly effective at identifying disease-related image features while occasionally interpreting healthy lungs as showing signs of Pneumonia.
+
+---
+
+## Lessons Learned
+
+This project reinforced several important machine learning concepts:
+
+- Image data requires specialized architectures
+- CNNs outperform traditional dense neural networks for image classification
+- Model evaluation requires more than accuracy alone
+- Confusion matrices and classification reports provide deeper insight into model performance
+- Training and validation curves can reveal overfitting and generalization behavior
+
+---
+
+## Future Improvements
+
+Potential future enhancements include:
+
+- Replace `Flatten()` with `GlobalAveragePooling2D()`
 - Data augmentation
 - Additional convolutional layers
-- Transfer learning
+- Transfer learning using pre-trained models
 - Hyperparameter tuning
-- Early stopping
-
----
-
-## Results
-
-Results will be added as the project progresses.
-
-Planned outputs include:
-
-- Training accuracy and loss charts
-- Confusion matrix
-- Classification report
-- Final model performance metrics
-- Sample predictions
-
----
-
-## Dataset
-
-The dataset consists of chest X-ray images categorized into:
-
-- COVID
-- Pneumonia
-- Normal
-
-To keep this repository lightweight and suitable for GitHub, the image dataset is not tracked by Git and should be obtained separately from its original source.
-
-Dataset source:
-
-- Kaggle COVID-19 Radiography Dataset
+- Early stopping optimization
+- Grad-CAM model explainability
+- Model deployment as a web application
 
 ---
 
@@ -142,37 +251,22 @@ Dataset source:
 
 Create and activate a virtual environment:
 
-```powershell
+**powershell**
 py -3.14 -m venv .venv
 
 .\.venv\Scripts\Activate.ps1
-```
 
 Install dependencies:
 
-```powershell
-python -m pip install --upgrade pip
-
+**powershell**
 python -m pip install -r requirements.txt
-```
 
-Launch Jupyter:
+Open the notebook:
 
-```powershell
+**powershell**
 jupyter notebook
-```
 
-or open the notebook directly in VS Code and select the project's `.venv` interpreter.
-
----
-
-## Future Improvements
-
-- Transfer learning with pre-trained CNN architectures
-- Model explainability using Grad-CAM
-- Performance comparison between multiple architectures
-- Deployment as a web application
-- Automated prediction pipeline
+or open the notebook directly in VS Code and select the project `.venv` interpreter.
 
 ---
 
@@ -180,6 +274,6 @@ or open the notebook directly in VS Code and select the project's `.venv` interp
 
 This project is licensed under the MIT License.
 
-The license applies only to the source code contained in this repository.
+The license applies to the source code only.
 
 Any datasets used remain subject to their original licensing terms and conditions.
